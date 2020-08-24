@@ -39,6 +39,7 @@ class BaseGiffyDialog extends StatefulWidget {
     @required this.title,
     @required this.onOkButtonPressed,
     @required this.description,
+    this.descriptionWidget,
     @required this.onlyOkButton,
     @required this.onlyCancelButton,
     @required this.buttonOkText,
@@ -65,6 +66,7 @@ class BaseGiffyDialog extends StatefulWidget {
   final VoidCallback onOkButtonPressed;
   final VoidCallback onCancelButtonPressed;
   final EntryAnimation entryAnimation;
+  final Widget descriptionWidget;
 
   @override
   _BaseGiffyDialogState createState() => _BaseGiffyDialogState();
@@ -128,7 +130,7 @@ class _BaseGiffyDialogState extends State<BaseGiffyDialog>
 
   Widget _buildPortraitWidget(BuildContext context, Widget imageWidget) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         Expanded(
           child: ClipRRect(
@@ -140,16 +142,22 @@ class _BaseGiffyDialogState extends State<BaseGiffyDialog>
         ),
         Expanded(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.only(top: 16.0),
                 child: widget.title,
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: widget.description,
-              ),
+              widget.description != null
+                  ? Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: widget.description,
+                    )
+                  : Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: widget.descriptionWidget,
+                    ),
               _buildButtonsBar(context)
             ],
           ),
@@ -160,8 +168,8 @@ class _BaseGiffyDialogState extends State<BaseGiffyDialog>
 
   Widget _buildLandscapeWidget(BuildContext context, Widget imageWidget) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         Expanded(
           child: ClipRRect(
@@ -179,10 +187,15 @@ class _BaseGiffyDialogState extends State<BaseGiffyDialog>
                 padding: const EdgeInsets.only(top: 16.0),
                 child: widget.title,
               ),
-              Padding(
-                padding: const EdgeInsets.all(3.0),
-                child: widget.description,
-              ),
+              widget.description != null
+                  ? Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: widget.description,
+                    )
+                  : Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: widget.descriptionWidget,
+                    ),
               _buildButtonsBar(context),
             ],
           ),
@@ -247,7 +260,7 @@ class _BaseGiffyDialogState extends State<BaseGiffyDialog>
                 0,
               )
             : null,
-        height: MediaQuery.of(context).size.height * 0.6,
+        // height: MediaQuery.of(context).size.height * 0.6,
         width: MediaQuery.of(context).size.width * (isPortrait ? 0.8 : 0.6),
         child: Material(
           type: MaterialType.card,
